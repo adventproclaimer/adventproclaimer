@@ -31,7 +31,7 @@ def send_batch_whatsapp_text_with_template(numbers,names,progress,paragraphs):
         json_data = {
             'typing_time': 0,
             'to': number,
-            'body': paragraphs,
+            'body': '\n'.join(map(str, paragraphs)),
         }
 
         response = requests.post('https://gate.whapi.cloud/messages/text', headers=headers, json=json_data)
