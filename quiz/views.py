@@ -69,10 +69,10 @@ def allQuizzes(request, code):
         quizzes = Quiz.objects.filter(course=course)
         for quiz in quizzes:
             quiz.total_questions = Question.objects.filter(quiz=quiz).count()
-            if quiz.start < datetime.datetime.now(timezone.utc):
-                quiz.started = True
-            else:
-                quiz.started = False
+            # if quiz.start < datetime.datetime.now(timezone.utc):
+            #     quiz.started = True
+            # else:
+            #     quiz.started = False
             quiz.save()
         return render(request, 'quiz/allQuizzes.html', {'course': course, 'quizzes': quizzes, 'faculty': Faculty.objects.get(faculty_id=request.session['faculty_id'])})
     else:
