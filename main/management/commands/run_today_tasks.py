@@ -4,6 +4,8 @@ import logging
 from datetime import date
 from django.utils import timezone
 from django.core.management.base import BaseCommand
+from django.db.models import Q
+from main.models import Course
 from django_celery_beat.models import PeriodicTask, CrontabSchedule
 from celery import current_app
 
@@ -68,9 +70,16 @@ class Command(BaseCommand):
     def _get_tasks_for_today(self, today: date):
         results = []
 
+        course = Course.objects.get(name="Parenting The Heart")
+        students = course.students.all()
+        query = Q()
+        for student in students:
+            query |= Q(name__icontains=student.name)
+
         queryset = (
             PeriodicTask.objects
             .filter(enabled=True)
+            .filter(query)
             .select_related("crontab")
         )
 
