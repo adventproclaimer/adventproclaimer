@@ -201,8 +201,8 @@ def quizResult(request, code, quiz_id):
             quiz.percentage = 0
 
         for question in questions:
-            student_answer = StudentAnswer.objects.get(
-                student=student, question=question)
+            student_answer = StudentAnswer.objects.filter(
+                student=student, question=question).latest('created_at')
             question.student_answer = student_answer.answer
 
         student_answers = StudentAnswer.objects.filter(
